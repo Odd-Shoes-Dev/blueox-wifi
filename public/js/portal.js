@@ -57,8 +57,12 @@ function toEmbedUrl(url) {
   try {
     const u = new URL(url);
     let videoId = null;
-    if (u.hostname.includes("youtube.com")) videoId = u.searchParams.get("v");
-    else if (u.hostname === "youtu.be") videoId = u.pathname.slice(1);
+    if (u.hostname.includes("youtube.com")) {
+      if (u.pathname.includes("/shorts/")) videoId = u.pathname.split("/shorts/")[1].split("?")[0];
+      else videoId = u.searchParams.get("v");
+    } else if (u.hostname === "youtu.be") {
+      videoId = u.pathname.slice(1).split("?")[0];
+    }
     if (!videoId) return null;
     return `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0&modestbranding=1&rel=0&enablejsapi=1`;
   } catch { return null; }

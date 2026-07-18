@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="refresh" content="0;url=https://wifi.blueoxkampus.com?mac=$(mac)&ip=$(ip)&link-login=$(link-login)&link-orig=$(link-orig)">
+  <title>Redirecting...</title>
+</head>
+<body>
+  <p>Redirecting to Blue OX WiFi portal...</p>
+  <script>
+    var url = 'https://wifi.blueoxkampus.com'
+      + '?mac=' + encodeURIComponent('$(mac)')
+      + '&ip=' + encodeURIComponent('$(ip)')
+      + '&link-login=' + encodeURIComponent('$(link-login)')
+      + '&link-orig=' + encodeURIComponent('$(link-orig)');
+    window.location.href = url;
+  </script>
+</body>
+</html>
