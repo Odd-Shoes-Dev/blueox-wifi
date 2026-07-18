@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+
+:root {
+  /* Brand colours */
+  --color-primary: #0044CC;
+  --color-primary-dark: #00339A;
+  --color-primary-light: #3369D6;
+  --color-accent: #F58220;
+  --color-accent-dark: #D96B0D;
+  --color-accent-light: #FFAA5C;
+
+  /* Backgrounds */
+  --color-bg: #0A0A0A;
+  --color-bg-card: #111827;
+  --color-bg-input: #1a2234;
+  --color-bg-light: #F5F7FA;
+
+  /* Text */
+  --color-text: #F5F7FA;
+  --color-text-body: #111827;
+  --color-text-muted: #9CA3AF;
+  --color-text-faint: #4B5563;
+
+  /* Borders */
+  --color-border: rgba(255,255,255,0.08);
+  --color-border-light: rgba(255,255,255,0.15);
+
+  /* Fonts */
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-utility: 'Space Mono', monospace;
+
+  /* Spacing */
+  --letter-spacing-display: 0.08em;
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  /* Shadows */
+  --shadow-card: 0 4px 24px rgba(0,0,0,0.4);
+  --shadow-glow: 0 0 40px rgba(0, 68, 204, 0.25);
+}

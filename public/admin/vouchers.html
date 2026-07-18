@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vouchers — Blue OX WiFi Admin</title>
+  <link rel="stylesheet" href="/css/theme.css" />
+  <link rel="stylesheet" href="/css/admin.css" />
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="/logo.png" alt="Blue OX" style="height:36px;object-fit:contain" />
+      <div><div class="logo-text">BLUE OX</div><div class="logo-sub">WIFI ADMIN</div></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-label">Main</div>
+      <a href="/admin/" class="nav-item"><svg class="nav-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</a>
+      <a href="/admin/videos" class="nav-item"><svg class="nav-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polygon points="5,3 19,12 5,21"/></svg>Videos</a>
+      <a href="/admin/vouchers" class="nav-item"><svg class="nav-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="10" rx="2"/><path d="M16 7v10M8 7v10"/></svg>Vouchers</a>
+      <div class="nav-label">Router</div>
+      <a href="/admin/router" class="nav-item"><svg class="nav-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M2 12h4M18 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>Router Stats</a>
+      <a href="/admin/users" class="nav-item"><svg class="nav-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Connected Users</a>
+      <div class="nav-label">Settings</div>
+      <a href="/admin/settings" class="nav-item"><svg class="nav-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</a>
+    </nav>
+    <div class="sidebar-footer"><button class="btn-logout" id="logoutBtn">Sign Out</button></div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <div class="page-title">VOUCHERS</div>
+        <div class="page-sub">Upload and manage hotspot voucher codes</div>
+      </div>
+      <button class="btn btn-danger btn-sm" id="clearUsedBtn">Clear Used Codes</button>
+    </div>
+    <div class="content">
+
+      <!-- Stats -->
+      <div class="stats-grid mb-6">
+        <div class="stat-card"><div class="stat-label">Unused</div><div class="stat-value green" id="statUnused">—</div></div>
+        <div class="stat-card"><div class="stat-label">Used</div><div class="stat-value accent" id="statUsed">—</div></div>
+        <div class="stat-card"><div class="stat-label">Total Uploaded</div><div class="stat-value" id="statTotal">—</div></div>
+      </div>
+
+      <div id="lowAlert" class="alert alert-warning mb-6" style="display:none">
+        ⚠ Less than 10 vouchers remaining. Upload more codes now.
+      </div>
+
+      <!-- Upload form -->
+      <div class="card mb-6">
+        <div class="card-title">Upload Voucher Codes</div>
+        <p class="text-sm text-muted mb-4">
+          Generate voucher codes on the MikroTik (IP → Hotspot → Users), copy them, then paste below — one code per line.
+        </p>
+        <div class="form-group">
+          <label>Paste codes (one per line)</label>
+          <textarea id="codesInput" placeholder="ABC123&#10;DEF456&#10;GHI789&#10;..." style="min-height:140px;font-family:var(--font-utility);font-size:13px"></textarea>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <button class="btn btn-primary" id="uploadBtn">Upload Codes</button>
+          <span class="text-sm text-muted" id="uploadCount"></span>
+        </div>
+      </div>
+
+      <!-- Recent vouchers table -->
+      <div class="card">
+        <div class="flex items-center justify-between mb-4">
+          <div class="card-title" style="margin-bottom:0">Recent Codes (last 50)</div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-ghost btn-sm" onclick="loadVouchers()">Refresh</button>
+          </div>
+        </div>
+        <div id="voucherTable"><div class="empty-state">Loading...</div></div>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="/js/admin.js"></script>
+  <script>
+    async function loadVouchers() {
+      const json = await api("/vouchers");
+      if (!json.success) return;
+      const d = json.data;
+
+      document.getElementById("statUnused").textContent = d.unused;
+      document.getElementById("statUsed").textContent = d.used;
+      document.getElementById("statTotal").textContent = d.total;
+      document.getElementById("lowAlert").style.display = d.unused < 10 ? "block" : "none";
+
+      const el = document.getElementById("voucherTable");
+      if (!d.recent.length) {
+        el.innerHTML = `<div class="empty-state">No vouchers yet. Upload codes above.</div>`;
+        return;
+      }
+
+      el.innerHTML = `
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th>Code</th>
+              <th>Status</th>
+              <th>Used By (MAC)</th>
+              <th>Used At</th>
+              <th>Added</th>
+            </tr></thead>
+            <tbody>
+              ${d.recent.map(v => `
+                <tr>
+                  <td class="td-mono td-primary">${v.code}</td>
+                  <td><span class="badge ${v.is_used ? 'badge-red' : 'badge-green'}">${v.is_used ? 'Used' : 'Unused'}</span></td>
+                  <td class="td-mono text-xs">${v.used_by_mac || '—'}</td>
+                  <td class="text-sm">${v.used_at ? timeAgo(v.used_at) : '—'}</td>
+                  <td class="text-sm text-muted">${timeAgo(v.created_at)}</td>
+                </tr>`).join("")}
+            </tbody>
+          </table>
+        </div>`;
+    }
+
+    // Live count as user types
+    document.getElementById("codesInput").addEventListener("input", () => {
+      const lines = document.getElementById("codesInput").value
+        .split("\n").map(l => l.trim()).filter(Boolean);
+      document.getElementById("uploadCount").textContent = lines.length
+        ? `${lines.length} code${lines.length === 1 ? "" : "s"} ready to upload`
+        : "";
+    });
+
+    document.getElementById("uploadBtn").addEventListener("click", async () => {
+      const codes = document.getElementById("codesInput").value
+        .split("\n").map(l => l.trim()).filter(Boolean);
+      if (!codes.length) { showToast("Paste at least one code", "error"); return; }
+
+      const btn = document.getElementById("uploadBtn");
+      btn.textContent = "Uploading...";
+      btn.disabled = true;
+
+      const json = await api("/vouchers/bulk", {
+        method: "POST",
+        body: JSON.stringify({ codes }),
+      });
+
+      btn.textContent = "Upload Codes";
+      btn.disabled = false;
+
+      if (json.success) {
+        showToast(`${json.data.added} codes uploaded`);
+        document.getElementById("codesInput").value = "";
+        document.getElementById("uploadCount").textContent = "";
+        loadVouchers();
+      } else {
+        showToast(json.error || "Upload failed", "error");
+      }
+    });
+
+    document.getElementById("clearUsedBtn").addEventListener("click", async () => {
+      if (!confirm("Delete all used voucher codes? This cannot be undone.")) return;
+      const json = await api("/vouchers/used", { method: "DELETE" });
+      if (json.success) {
+        showToast(`${json.data.deleted} used codes removed`);
+        loadVouchers();
+      }
+    });
+
+    requireAuth().then(() => { setActiveNav(); setupLogout(); loadVouchers(); });
+  </script>
+</body>
+</html>

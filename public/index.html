@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blue OX WiFi</title>
+  <link rel="stylesheet" href="/css/theme.css" />
+  <link rel="stylesheet" href="/css/portal.css" />
+</head>
+<body>
+  <div class="portal-wrap">
+
+    <div class="logo-area">
+      <img src="/logo.png" alt="Blue OX WiFi" style="height:64px;object-fit:contain" />
+      <div>
+        <div class="brand-name" id="portalTitle">BLUE OX WIFI</div>
+        <div class="brand-sub" id="portalSub">Watch a short video to get free internet access.</div>
+      </div>
+    </div>
+
+    <!-- Main card -->
+    <div class="card" id="mainCard">
+      <div class="loading-state" id="loadingState">Loading video...</div>
+
+      <!-- Video section (hidden until loaded) -->
+      <div id="videoSection" style="display:none">
+        <div class="video-wrap">
+          <iframe
+            id="ytPlayer"
+            src=""
+            allow="autoplay; encrypted-media"
+            allowfullscreen
+            title="Video"
+          ></iframe>
+          <!-- Overlay to detect play start -->
+          <div class="video-overlay" id="videoOverlay">
+            <button class="play-btn" id="playBtn" aria-label="Play video">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <polygon points="5,3 19,12 5,21" fill="white"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Progress -->
+        <div class="progress-area" id="progressArea">
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressFill"></div>
+          </div>
+          <div class="progress-label" id="progressLabel">Watch the video to unlock your voucher</div>
+        </div>
+
+        <!-- Error -->
+        <div style="padding: 0 20px 8px">
+          <div class="error-msg" id="errorMsg"></div>
+        </div>
+
+        <!-- Voucher reveal -->
+        <div class="voucher-area" id="voucherArea">
+          <div class="voucher-label">YOUR ACCESS CODE</div>
+          <div class="voucher-code" id="voucherCode">------</div>
+          <button class="btn-connect" id="connectBtn">Connect Now</button>
+          <div style="font-size:12px; color: var(--color-text-muted); text-align:center">
+            This code is for your use only. Do not share it.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="portal-footer">BLUE OX WIFI · FREE INTERNET · POWERED BY BLUE OX KAMPUS</div>
+  </div>
+
+  <script src="/js/portal.js"></script>
+</body>
+</html>

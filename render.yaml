@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: blue-ox-wifi
+    runtime: node
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: MIKROTIK_IP
+        sync: false
+      - key: MIKROTIK_PORT
+        value: "8728"
+      - key: MIKROTIK_USER
+        sync: false
+      - key: MIKROTIK_PASSWORD
+        sync: false
+      - key: MIKROTIK_HOTSPOT_SERVER
+        value: hotspot1

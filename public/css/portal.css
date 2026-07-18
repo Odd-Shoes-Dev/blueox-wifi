@@ -1,0 +1,230 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--color-bg);
+  color: var(--color-text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+}
+
+.portal-wrap {
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+/* Logo */
+.logo-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-placeholder {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 28px;
+  letter-spacing: var(--letter-spacing-display);
+  color: #fff;
+  /* Replace this with an <img> tag when logo is ready */
+}
+
+.brand-name {
+  font-family: var(--font-display);
+  font-size: 36px;
+  letter-spacing: var(--letter-spacing-display);
+  color: var(--color-text);
+  text-align: center;
+}
+
+.brand-sub {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--color-text-muted);
+  text-align: center;
+  max-width: 360px;
+  line-height: 1.5;
+}
+
+/* Card */
+.card {
+  width: 100%;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+
+/* Video */
+.video-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: #000;
+}
+
+.video-wrap iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+.video-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.6);
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+
+.video-overlay.hidden { display: none; }
+
+.play-btn {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.play-btn:hover { background: var(--color-accent-dark); transform: scale(1.08); }
+
+.play-btn svg { margin-left: 4px; }
+
+/* Progress */
+.progress-area {
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.progress-bar-bg {
+  width: 100%;
+  height: 6px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+  border-radius: 99px;
+  transition: width 1s linear;
+}
+
+.progress-label {
+  font-family: var(--font-utility);
+  font-size: 11px;
+  color: var(--color-text-muted);
+  letter-spacing: 0.04em;
+}
+
+/* Voucher reveal */
+.voucher-area {
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  display: none;
+}
+
+.voucher-area.visible { display: flex; }
+
+.voucher-label {
+  font-family: var(--font-utility);
+  font-size: 11px;
+  color: var(--color-text-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.voucher-code {
+  font-family: var(--font-utility);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--color-accent);
+  letter-spacing: 0.2em;
+  background: rgba(245, 130, 32, 0.1);
+  border: 1px solid rgba(245, 130, 32, 0.3);
+  border-radius: var(--radius-md);
+  padding: 12px 24px;
+}
+
+.btn-connect {
+  width: 100%;
+  padding: 14px;
+  background: var(--color-accent);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  letter-spacing: 0.02em;
+}
+
+.btn-connect:hover { background: var(--color-accent-dark); }
+.btn-connect:active { transform: scale(0.98); }
+
+/* Error state */
+.error-msg {
+  padding: 12px 16px;
+  background: rgba(239,68,68,0.1);
+  border: 1px solid rgba(239,68,68,0.3);
+  border-radius: var(--radius-sm);
+  color: #FCA5A5;
+  font-size: 13px;
+  text-align: center;
+  display: none;
+}
+
+.error-msg.visible { display: block; }
+
+/* Loading */
+.loading-state {
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+/* Footer */
+.portal-footer {
+  font-family: var(--font-utility);
+  font-size: 11px;
+  color: var(--color-text-faint);
+  text-align: center;
+  letter-spacing: 0.04em;
+}

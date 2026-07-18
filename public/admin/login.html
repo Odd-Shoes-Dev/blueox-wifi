@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login — Blue OX WiFi</title>
+  <link rel="stylesheet" href="/css/theme.css" />
+  <link rel="stylesheet" href="/css/admin.css" />
+</head>
+<body>
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-logo">
+        <!-- Replace with <img src="/logo.png" height="48"> when logo is ready -->
+        <img src="/logo.png" alt="Blue OX WiFi" style="height:64px;object-fit:contain" />
+        <div class="login-title">BLUE OX WIFI</div>
+        <div class="login-sub">Admin Panel</div>
+      </div>
+
+      <div id="errorMsg" class="alert alert-error" style="display:none"></div>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="password">Admin Password</label>
+          <input type="password" id="password" placeholder="Enter password" autofocus required />
+        </div>
+        <button type="submit" class="btn btn-primary w-full" style="justify-content:center;padding:12px">
+          Sign In
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const password = document.getElementById("password").value;
+      const btn = e.target.querySelector("button");
+      btn.textContent = "Signing in...";
+      btn.disabled = true;
+
+      try {
+        const res = await fetch("/api/admin/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ password }),
+        });
+        const json = await res.json();
+        if (json.success) {
+          window.location.href = "/admin/";
+        } else {
+          document.getElementById("errorMsg").textContent = "Incorrect password.";
+          document.getElementById("errorMsg").style.display = "block";
+          btn.textContent = "Sign In";
+          btn.disabled = false;
+        }
+      } catch {
+        document.getElementById("errorMsg").textContent = "Connection error. Try again.";
+        document.getElementById("errorMsg").style.display = "block";
+        btn.textContent = "Sign In";
+        btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
