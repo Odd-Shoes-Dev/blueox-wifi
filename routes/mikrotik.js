@@ -1,6 +1,44 @@
 const express = require("express");
 const { RouterOSAPI } = require("node-routeros");
+const { sql } = require("../db");
 const router = express.Router();
+
+function durationToUptime(d) {
+  const map = { "30m": "00:30:00", "1h": "01:00:00", "2h": "02:00:00", "4h": "04:00:00", "8h": "08:00:00", "1d": "1d 00:00:00" };
+  return map[d] || "01:00:00";
+}
+
+// MikroTik calls this to get a RouterOS script that creates pending voucher users
+router.get("/sync-script", async (req, res) => {
+  const secret = process.env.SYNC_SECRET || "blueox-sync";
+  if (req.query.secret !== secret) return res.status(403).send("# Forbidden");
+  try {
+    const db = sql();
+    const pending = await db`SELECT code, duration FROM vouchers WHERE mikrotik_status = 'pending' LIMIT 100`;
+    if (!pending.length) return res.type("text/plain").send("# No pending vouchers");
+    const lines = pending.map(v => {
+      const uptime = durationToUptime(v.duration);
+      const pw = v.code.toLowerCase();
+      return `:do { /ip/hotspot/user add name=${v.code} password=${pw} uptime-limit=${uptime} profile=default } on-error={}`;
+    });
+    lines.push(`/tool/fetch url="https://wifi.blueoxkampus.com/api/router/sync-done?secret=${secret}" keep-result=no`);
+    res.type("text/plain").send(lines.join("\n"));
+  } catch (err) {
+    res.type("text/plain").send(`# Error: ${err.message}`);
+  }
+});
+
+// MikroTik calls this after executing the sync script
+router.get("/sync-done", async (req, res) => {
+  const secret = process.env.SYNC_SECRET || "blueox-sync";
+  if (req.query.secret !== secret) return res.status(403).json({ success: false });
+  try {
+    await sql()`UPDATE vouchers SET mikrotik_status = 'synced' WHERE mikrotik_status = 'pending'`;
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
 
 function getConfig() {
   return {

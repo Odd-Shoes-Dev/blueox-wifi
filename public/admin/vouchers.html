@@ -48,18 +48,47 @@
         ⚠ Less than 10 vouchers remaining. Upload more codes now.
       </div>
 
+      <!-- Generate form -->
+      <div class="card mb-6">
+        <div class="card-title">Generate Vouchers</div>
+        <p class="text-sm text-muted mb-4">
+          Codes are generated here and synced to MikroTik automatically every 5 minutes via the scheduler script.
+        </p>
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Quantity</label>
+            <input type="number" id="genQty" value="50" min="1" max="500" />
+          </div>
+          <div class="form-group">
+            <label>Duration per voucher</label>
+            <select id="genDuration">
+              <option value="30m">30 minutes</option>
+              <option value="1h" selected>1 hour</option>
+              <option value="2h">2 hours</option>
+              <option value="4h">4 hours</option>
+              <option value="8h">8 hours</option>
+              <option value="1d">1 day</option>
+            </select>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <button class="btn btn-primary" id="generateBtn">Generate Vouchers</button>
+          <span class="text-sm text-muted" id="generateStatus"></span>
+        </div>
+      </div>
+
       <!-- Upload form -->
       <div class="card mb-6">
-        <div class="card-title">Upload Voucher Codes</div>
+        <div class="card-title">Upload Existing Codes (Manual)</div>
         <p class="text-sm text-muted mb-4">
-          Generate voucher codes on the MikroTik (IP → Hotspot → Users), copy them, then paste below — one code per line.
+          If you already created codes on MikroTik manually, paste them here to register them in the system.
         </p>
         <div class="form-group">
           <label>Paste codes (one per line)</label>
-          <textarea id="codesInput" placeholder="ABC123&#10;DEF456&#10;GHI789&#10;..." style="min-height:140px;font-family:var(--font-utility);font-size:13px"></textarea>
+          <textarea id="codesInput" placeholder="ABC123&#10;DEF456&#10;GHI789&#10;..." style="min-height:120px;font-family:var(--font-utility);font-size:13px"></textarea>
         </div>
         <div style="display:flex;align-items:center;gap:12px">
-          <button class="btn btn-primary" id="uploadBtn">Upload Codes</button>
+          <button class="btn btn-ghost" id="uploadBtn">Upload Codes</button>
           <span class="text-sm text-muted" id="uploadCount"></span>
         </div>
       </div>
@@ -102,6 +131,8 @@
             <thead><tr>
               <th>Code</th>
               <th>Status</th>
+              <th>Duration</th>
+              <th>MikroTik</th>
               <th>Used By (MAC)</th>
               <th>Used At</th>
               <th>Added</th>
@@ -111,6 +142,8 @@
                 <tr>
                   <td class="td-mono td-primary">${v.code}</td>
                   <td><span class="badge ${v.is_used ? 'badge-red' : 'badge-green'}">${v.is_used ? 'Used' : 'Unused'}</span></td>
+                  <td class="td-mono text-xs">${v.duration || '—'}</td>
+                  <td><span class="badge ${v.mikrotik_status === 'synced' ? 'badge-green' : 'badge-red'}">${v.mikrotik_status === 'synced' ? 'Synced' : 'Pending'}</span></td>
                   <td class="td-mono text-xs">${v.used_by_mac || '—'}</td>
                   <td class="text-sm">${v.used_at ? timeAgo(v.used_at) : '—'}</td>
                   <td class="text-sm text-muted">${timeAgo(v.created_at)}</td>
@@ -162,6 +195,26 @@
       if (json.success) {
         showToast(`${json.data.deleted} used codes removed`);
         loadVouchers();
+      }
+    });
+
+    document.getElementById("generateBtn").addEventListener("click", async () => {
+      const qty = document.getElementById("genQty").value;
+      const duration = document.getElementById("genDuration").value;
+      const btn = document.getElementById("generateBtn");
+      const status = document.getElementById("generateStatus");
+      btn.textContent = "Generating..."; btn.disabled = true;
+      const json = await api("/vouchers/generate", {
+        method: "POST",
+        body: JSON.stringify({ quantity: parseInt(qty), duration }),
+      });
+      btn.textContent = "Generate Vouchers"; btn.disabled = false;
+      if (json.success) {
+        showToast(`${json.data.added} vouchers generated — MikroTik will sync within 5 minutes`);
+        status.textContent = `${json.data.added} codes created, pending MikroTik sync`;
+        loadVouchers();
+      } else {
+        showToast(json.error || "Generation failed", "error");
       }
     });
 

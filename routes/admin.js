@@ -84,6 +84,29 @@ router.get("/vouchers", requireAuth, async (req, res) => {
   } catch (err) { res.status(500).json({ success: false, error: err.message }); }
 });
 
+router.post("/vouchers/generate", requireAuth, async (req, res) => {
+  try {
+    const { quantity, duration } = req.body;
+    const qty = Math.min(parseInt(quantity) || 10, 500);
+    const dur = duration || "1h";
+    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    const db = sql();
+    let added = 0, attempts = 0;
+    while (added < qty && attempts < qty * 5) {
+      attempts++;
+      let code = "";
+      for (let i = 0; i < 4; i++) code += chars[Math.floor(Math.random() * chars.length)];
+      const result = await db`
+        INSERT INTO vouchers (code, duration, mikrotik_status)
+        VALUES (${code}, ${dur}, 'pending')
+        ON CONFLICT (code) DO NOTHING
+      `;
+      if (result.count) added++;
+    }
+    res.json({ success: true, data: { added } });
+  } catch (err) { res.status(500).json({ success: false, error: err.message }); }
+});
+
 router.post("/vouchers/bulk", requireAuth, async (req, res) => {
   try {
     const { codes } = req.body;

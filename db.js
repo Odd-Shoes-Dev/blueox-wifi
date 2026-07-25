@@ -30,9 +30,14 @@ async function init() {
       is_used INTEGER DEFAULT 0,
       used_at TIMESTAMPTZ,
       used_by_mac TEXT,
+      duration TEXT DEFAULT '1h',
+      mikrotik_status TEXT DEFAULT 'pending',
       created_at TIMESTAMPTZ DEFAULT NOW()
     )
   `;
+  // Migrate existing rows
+  await db`ALTER TABLE vouchers ADD COLUMN IF NOT EXISTS duration TEXT DEFAULT '1h'`;
+  await db`ALTER TABLE vouchers ADD COLUMN IF NOT EXISTS mikrotik_status TEXT DEFAULT 'synced'`;
   await db`
     CREATE TABLE IF NOT EXISTS settings (
       key TEXT PRIMARY KEY,
