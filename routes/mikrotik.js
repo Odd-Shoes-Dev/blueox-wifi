@@ -19,9 +19,9 @@ router.get("/sync-script", async (req, res) => {
     const lines = pending.map(v => {
       const uptime = durationToUptime(v.duration);
       const pw = v.code.toLowerCase();
-      return `:do { /ip/hotspot/user add name=${v.code} password=${pw} uptime-limit=${uptime} profile=default } on-error={}`;
+      return `:do {/ip/hotspot/user add name="${v.code}" password="${pw}" limit-uptime=${uptime} profile=default} on-error={}`;
     });
-    lines.push(`/tool/fetch url="https://wifi.blueoxkampus.com/api/router/sync-done?secret=${secret}" keep-result=no`);
+    lines.push(`:do {/tool/fetch url="https://wifi.blueoxkampus.com/api/router/sync-done?secret=${secret}" keep-result=no} on-error={}`);
     res.type("text/plain").send(lines.join("\n"));
   } catch (err) {
     res.type("text/plain").send(`# Error: ${err.message}`);
